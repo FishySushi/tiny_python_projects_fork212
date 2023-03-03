@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 
-TESTS=$(mktemp)
-find . -mindepth 2 -maxdepth 2 -name all_test.sh | sort > "$TESTS"
+set -eu -o pipefail
 
-while read -r TEST; do
-    DIR=$(dirname "$TEST")
-    echo -e "\n\n==> $DIR <==\n\n"
-    (cd "$DIR" && ./all_test.sh)
-done < "$TESTS"
+PRG="howler.py"
+for FILE in solution*.py; do
+    echo "==> ${FILE} <==" 
+    cp "$FILE" "$PRG"
+    make test
+done
 
-rm "$TESTS"
+echo "Done."
